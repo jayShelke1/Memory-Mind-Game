@@ -56,12 +56,16 @@ export default function MemoryGame() {
     if (selectedCards.length === 2) {
       const [first, second] = selectedCards;
       if (cards[first].icon === cards[second].icon) {
-        setCards((prev) => prev.map((card, i) => (i === first || i === second ? { ...card, isMatched: true } : card)));
+        setCards((prev) =>
+          prev.map((card, i) =>
+            i === first || i === second ? { ...card, isMatched: true } : card
+          )
+        );
         setMatches((m) => m + 1);
         setSelectedCards([]);
-        setScore(score + 100 + streak * 10);
-        setStreak(streak + 1);
-
+        setScore((s) => s + 100 + streak * 10); // ✅ Use functional update
+        setStreak((s) => s + 1);
+  
         if (matches + 1 === cards.length / 2) {
           setTimeout(() => {
             toast.success(`🎉 Level ${level} Complete! Next Level...`);
@@ -69,18 +73,23 @@ export default function MemoryGame() {
             setCards(shuffleCards(level + 1));
             setMatches(0);
             setShowPreview(true);
-            setTimer(60 - level);
+            setTimer(30 - level);
           }, 500);
         }
       } else {
         setTimeout(() => {
-          setCards((prev) => prev.map((card, i) => (i === first || i === second ? { ...card, isFlipped: false } : card)));
+          setCards((prev) =>
+            prev.map((card, i) =>
+              i === first || i === second ? { ...card, isFlipped: false } : card
+            )
+          );
           setSelectedCards([]);
           setStreak(0);
         }, 600);
       }
     }
-  }, [selectedCards]);
+  }, [selectedCards, level, cards, matches, streak]); // ✅ Add missing dependencies
+  
 
   useEffect(() => {
     if (timer === 0) {
