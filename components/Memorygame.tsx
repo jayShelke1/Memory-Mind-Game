@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import { toast, Toaster } from "sonner";
 import {
   Heart, Star, Sun, Moon, Cloud, Flower2, CloudLightning, Gem, Flame, LucideIcon,
@@ -63,9 +62,9 @@ export default function MemoryGame() {
         );
         setMatches((m) => m + 1);
         setSelectedCards([]);
-        setScore((s) => s + 100 + streak * 10); // ✅ Use functional update
+        setScore((s) => s + 100 + streak * 10);
         setStreak((s) => s + 1);
-  
+
         if (matches + 1 === cards.length / 2) {
           setTimeout(() => {
             toast.success(`🎉 Level ${level} Complete! Next Level...`);
@@ -88,8 +87,7 @@ export default function MemoryGame() {
         }, 600);
       }
     }
-  }, [selectedCards, level, cards, matches, streak]); // ✅ Add missing dependencies
-  
+  }, [selectedCards, level, cards, matches, streak]);
 
   useEffect(() => {
     if (timer === 0) {
@@ -106,7 +104,11 @@ export default function MemoryGame() {
   const handleCardClick = (index: number) => {
     if (selectedCards.includes(index) || cards[index].isMatched || showPreview) return;
     setSelectedCards([...selectedCards, index]);
-    setCards((prev) => prev.map((card, i) => (i === index ? { ...card, isFlipped: true } : card)));
+    setCards((prev) =>
+      prev.map((card, i) =>
+        i === index ? { ...card, isFlipped: true } : card
+      )
+    );
   };
 
   return (
@@ -124,15 +126,18 @@ export default function MemoryGame() {
         {cards.map((card, index) => {
           const IconComponent = card.icon;
           return (
-            <motion.div
+            <div
               key={card.id}
               onClick={() => handleCardClick(index)}
-              className="w-full aspect-square flex items-center justify-center bg-gray-700 rounded-lg border cursor-pointer shadow-md"
-              animate={{ rotateY: card.isFlipped || showPreview ? 180 : 0 }}
-              transition={{ duration: 0.3 }}
+              className={`w-full aspect-square flex items-center justify-center bg-gray-700 rounded-lg border cursor-pointer shadow-md
+                transition-transform duration-300 transform ${
+                  card.isFlipped || showPreview ? "rotate-y-180" : ""
+                }`}
             >
-              {(card.isFlipped || showPreview) && <IconComponent className={`w-10 h-10 ${card.color}`} />}
-            </motion.div>
+              {(card.isFlipped || showPreview) && (
+                <IconComponent className={`w-10 h-10 ${card.color}`} />
+              )}
+            </div>
           );
         })}
       </div>
