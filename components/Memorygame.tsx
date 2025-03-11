@@ -21,8 +21,8 @@ const iconSet: { icon: LucideIcon; color: string }[] = [
 
 const shuffleCards = (level: number) => {
   const numPairs = Math.min(level + 3, iconSet.length);
-  let selectedIcons = iconSet.slice(0, numPairs);
-  let cards = selectedIcons.flatMap(({ icon, color }, index) => [
+  const selectedIcons = iconSet.slice(0, numPairs);
+  const cards = selectedIcons.flatMap(({ icon, color }, index) => [
     { id: index * 2, icon, color, isMatched: false, isFlipped: false },
     { id: index * 2 + 1, icon, color, isMatched: false, isFlipped: false },
   ]);
